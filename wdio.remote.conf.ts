@@ -1,3 +1,36 @@
+const selectedDevice: keyof typeof capabilitiesByDevice =
+  process.argv.find((arg) => arg.startsWith('--device='))?.split('=')[1] as keyof typeof capabilitiesByDevice ||
+  process.env.DEVICE as keyof typeof capabilitiesByDevice ||
+  'android';
+
+const capabilitiesByDevice = {
+  android: [{
+    browserName: 'Chrome',
+    platformName: 'Android',
+    'appium:deviceName': 'Google Pixel 6 Pro GoogleAPI Emulator',
+    'appium:platformVersion': '16',
+    'appium:automationName': 'UiAutomator2',
+    'sauce:options': {
+      name: 'Android real-device test',
+      build: 'wdio-build-1'
+    }
+  }],
+
+  ios: [{
+   browserName: 'safari',
+    platformName: 'ios',
+    // W3C Protocol is mandatory for Appium 2
+    'appium:platformVersion': '15.4',
+    'appium:deviceName': 'iPhone 13 Simulator',
+    // Mandatory for Appium 2
+    'appium:automationName': 'xcuitest',
+    'sauce:options': {
+      name: 'iPhone 15 real-device test',
+      build: 'wdio-build-1'
+    }
+  }]
+};
+
 export const config: WebdriverIO.Config = {
     //
     // ====================
@@ -62,7 +95,7 @@ export const config: WebdriverIO.Config = {
         'visual'
     ],
 
-    capabilities: [{
+    capabilities: capabilitiesByDevice[selectedDevice] || capabilitiesByDevice.android,
         
         // browserName: 'chrome',
         // // browserVersion: 'latest',
@@ -70,25 +103,31 @@ export const config: WebdriverIO.Config = {
         // 'appium:deviceName': 'Samsung Galaxy S23 FE',
         // 'appium:platformVersion': '16',
         // 'appium:automationName': 'UiAutomator2',
-    //  browserName: 'chrome',
+    
+    
+    
+    //      browserName: 'chrome',
     // platformName: 'android',
     // // W3C Protocol is mandatory for Appium 2
     // 'appium:platformVersion': '16',
     // 'appium:deviceName': 'Google Pixel 6 Pro GoogleAPI Emulator',
     // // Mandatory for Appium 2
     // 'appium:automationName': 'uiautomator2',
-    browserName: 'safari',
-    platformName: 'iOS',
-    'appium:deviceName': 'iPhone 15',
-    'appium:platformVersion': '17',
-    'appium:automationName': 'XCUITest',
+
+    // browserName: 'safari',
+    // platformName: 'ios',
+    // // W3C Protocol is mandatory for Appium 2
+    // 'appium:platformVersion': '15.4',
+    // 'appium:deviceName': 'iPhone 13 Simulator',
+    // // Mandatory for Appium 2
+    // 'appium:automationName': 'xcuitest',
 
 
-        'sauce:options': {
-            name: 'My WDIO Sauce test',
-            build: 'wdio-build-1',
-        }
-    }],
+        // 'sauce:options': {
+        //     name: 'My WDIO Sauce test',
+        //     build: 'wdio-build-1',
+        // }
+    
     //
     // ===================
     // Test Configurations

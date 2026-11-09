@@ -1,3 +1,29 @@
+const selectedDevice: keyof typeof capabilitiesByDevice =
+  process.argv.find((arg) => arg.startsWith('--device='))?.split('=')[1] as keyof typeof capabilitiesByDevice ||
+  process.env.DEVICE as keyof typeof capabilitiesByDevice ||
+  'android';
+
+const capabilitiesByDevice = {
+  android: [{
+    browserName: 'Chrome',
+    platformName: 'Android',
+    'appium:deviceName': 'Google Pixel 6 Pro GoogleAPI Emulator',
+    'appium:platformVersion': '16',
+    'appium:automationName': 'UiAutomator2',
+    'appium:chromedriverExecutable': '/Users/shaikfaruk/.appium/chromedriver/mac_arm-144.0.7559.133/chromedriver-mac-arm64/chromedriver',
+  }],
+
+  ios: [{
+    browserName: 'safari',
+    platformName: 'iOS',
+    'appium:platformVersion': '26.2',
+    'appium:deviceName': 'iPhone 16e',
+    'appium:automationName': 'XCUITest',
+  }],
+};
+
+
+
 export const config: WebdriverIO.Config = {
     //
     // ====================
@@ -60,28 +86,10 @@ export const config: WebdriverIO.Config = {
     // https://saucelabs.com/platform/platform-configurator
     //
 
-    capabilities: [{
-    browserName: 'Safari',
-    platformName: 'iOS',
-"appium:platformVersion": '26.2',
-"appium:deviceName": 'iPhone 16e',
-    // platformName: 'Android',
-    //  platformName: 'iOS',
-    //  "appium:platformVersion": "26.2",
-    //  "appium:deviceName": "iPhone 16e",
-    // 'appium:platformVersion': '16',
-    // 'appium:deviceName': 'emulator-5554',
-    // 'appium:automationName': 'UiAutomator2',
-    // 'appium:app': '/Users/shaikfaruk/Documents/android/ApiDemo_1.1_Apkpure.apk',
-    // 'appium:automationName': 'UiAutomator2'
-        'appium:automationName': 'XCUITest',
-    // 'appium:app':'/Users/shaikfaruk/Documents/android/Android-NativeDemoApp-0.4.0.apk',
-    // 'appium:chromedriverExecutable': '/Users/shaikfaruk/.appium/chromedriver/mac_arm-144.0.7559.133/chromedriver-mac-arm64/chromedriver'
-    // "appium:appPackage": "com.wdiodemoapp",
-    // "appium:appActivity": "com.wdiodemoapp.MainActivity",
-    //  "appium:noReset": true
+ capabilities: capabilitiesByDevice[selectedDevice] || capabilitiesByDevice.android,
 
-    }],
+
+    // }],
     //
     // ===================
     // Test Configurations
