@@ -19,14 +19,19 @@ describe("window handling",()=>{
 
     it("window handling", async()=>{
         await browser.url("https://www.wikipedia.org/")
+        await browser.pause(2000);
         await eyes.check("Home page",Target.window());
         let tet=await $$("//a")
         for(let a of tet){
             console.log(a.getText());
         }
+        await browser.pause(6000);
         let dropdown =await $("#searchLanguage")
+        await eyes.check("new test",Target.window())
+        expect(dropdown).toBeDisplayed();
         dropdown.selectByVisibleText('Shqip')
         await browser.saveScreenshot("screenshot1.png");
+
         // await browser.url("https://demoqa.com/browser-windows");
         // await $('//button[@id="tabButton"]').doubleClick();
         // const text=await $("//h1").getText();
